@@ -18,6 +18,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ual": [
+        "dist/ual"
+      ],
+      "ual/*": [
+        "dist/ual/*"
+      ]
+    }
   }
 }
