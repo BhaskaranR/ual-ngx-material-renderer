@@ -1,6 +1,6 @@
 {
-  "name": "ual",
-  "version": "0.0.1",
+  "name": "ual-ngx-material-renderer",
+  "version": "VERSION",
   "peerDependencies": {
     "@angular/common": "^8.0.1",
     "@angular/core": "^8.0.1"

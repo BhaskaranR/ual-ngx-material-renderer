@@ -19,15 +19,11 @@ export class AccountInputComponent implements OnInit {
   }
 
   close() {
-
   }
 
   submit() {
     if (!this.accountForm.valid) {
       return;
     }
-    
   }
-
-
 }

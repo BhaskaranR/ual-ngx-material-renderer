@@ -1,16 +1,17 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { UalComponent } from './ual.component';
-import { AccountInputComponent } from './account-input/account-input.component';
-import { AuthButtonComponent } from './auth-button/auth-button.component';
-import { DownloadAuthenticatorComponent } from './download-authenticator/download-authenticator.component';
-import { GetAuthenticatorComponent } from './get-authenticator/get-authenticator.component';
+import { AccountInputComponent } from './authentication/account-input/account-input.component';
+import { AuthButtonComponent } from './authentication/auth-button/auth-button.component';
+import { DownloadAuthenticatorComponent } from './authentication/download-authenticator/download-authenticator.component';
+import { GetAuthenticatorComponent } from './authentication/get-authenticator/get-authenticator.component';
 import { MessageComponent } from './message/message.component';
-import {MatInputModule, MatDialogModule} from '@angular/material';
+import { MatInputModule, MatDialogModule, MatIconModule, MatDialog, MatStepperModule } from '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-
+import { UalService } from './ual.service';
+import { UALConfig } from './ual.config';
 
 @NgModule({
   declarations: [UalComponent, AccountInputComponent, AuthButtonComponent, DownloadAuthenticatorComponent,
@@ -20,11 +21,21 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    MatStepperModule,
     MatDialogModule,
     MatInputModule,
+    MatIconModule
   ],
   exports: [UalComponent, AccountInputComponent, AuthButtonComponent, DownloadAuthenticatorComponent,
     GetAuthenticatorComponent, MessageComponent],
-  entryComponents: [AccountInputComponent, AuthButtonComponent, DownloadAuthenticatorComponent, GetAuthenticatorComponent, MessageComponent]
+  entryComponents: [UalComponent, AccountInputComponent, AuthButtonComponent, 
+    DownloadAuthenticatorComponent, GetAuthenticatorComponent, MessageComponent]
 })
-export class UalModule { }
+export class UalModule {
+  static forRoot(config: UALConfig): ModuleWithProviders {
+    return {
+      ngModule: UalModule,
+      providers: [UalService, { provide: 'config', useValue: config }, { provide: 'dialog', useExisting: MatDialog }]
+    };
+  }
+}

@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { UAL, UALError, UALErrorType } from 'universal-authenticator-library';
+import { MatDialog } from '@angular/material';
+import { UALConfig } from './ual.config';
+import { UalComponent } from './ual.component';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +16,18 @@ export class UalService {
   message = '';
   activeUser: any;
   modal = false;
+  availableAuthenticators: Array<any> = [];
 
-  constructor(private chains, private authenticators, private availableAuthenticators, private appName: string
-  ) {}
+  chains: any;
+  authenticators: Array<any>;
+  appName: string;
 
+  constructor(@Inject('config') config: UALConfig, public dialog: MatDialog
+  ) {
+    this.chains = config.chains;
+    this.authenticators = config.authenticators;
+    this.appName = config.appName;
+  }
 
   initAuthenticators() {
     const type = window.localStorage.getItem('UALLoggedInAuthType');
@@ -72,7 +83,7 @@ export class UalService {
   }
 
   getAuthenticatorInstance = (type, availableAuthenticators) => {
-    const loggedIn = availableAuthenticators.filter(auth => auth.constructor.name === type)
+    const loggedIn = availableAuthenticators.filter(auth => auth.constructor.name === type);
     if (!loggedIn.length) {
       this.clearCache();
     }
@@ -97,7 +108,18 @@ export class UalService {
 
   showModal() {
     this.availableAuthenticators.forEach(auth => auth.reset);
-    this.modal = true;
+    const dialogRef = this.dialog.open(UalComponent, {
+      width: '250px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  hideModal() {
+    this.loading = true;
+    this.message = 'Loading Authenticators...';
   }
 
   async authenticateWithoutAccountInput(authenticator, isAutoLogin = false) {
@@ -129,7 +151,7 @@ export class UalService {
     // tslint:disable-next-line: max-line-length
     this.message = authenticator.requiresGetKeyConfirmation() ? 'Please approve the request from your device.' : 'Please wait while we find your account';
     try {
-      const users = await authenticator.login(accountInput)
+      const users = await authenticator.login(accountInput);
       window.localStorage.setItem('UALLoggedInAuthType', authenticatorName);
       window.localStorage.setItem('UALAccountName', accountInput);
       this.activeUser = users[users.length - 1],
