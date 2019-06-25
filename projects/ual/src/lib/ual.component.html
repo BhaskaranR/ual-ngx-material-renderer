@@ -1,8 +1,8 @@
-<h4 mat-dialog-title>To continue, please select an option</h4>
 <mat-dialog-content class="mat-typography">
     <mat-horizontal-stepper [linear]="isLinear" #stepper>
         <mat-step>
             <ng-template matStepLabel>Authenticators</ng-template>
+            <h4>To continue, please select an option</h4>
             <mat-nav-list class="full-width" dense>
                 <a mat-list-item *ngFor="let authenticator of ualService.availableAuthenticators; last as last" href="#"
                     (click)="onAuthButtonClickHandler(authenticator)">
@@ -29,30 +29,27 @@
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>Account Input Step</ng-template>
-            <p class="ual-modal-content-description">
-                Next, please enter your Account Name
-            </p>
+            <h4> Next, please enter your Account Name</h4>
             <form (keydown.enter)="submitAccount()">
                 <mat-form-field class="full-width">
-                    <input id="ual-account-input" matInput placeholder="Account Name" FormControlName="accountName"
+                    <input id="ual-account-input" matInput placeholder="Account Name" [formControl]="accountName"
                         autocapitalize="none" />
-                    <!-- <mat-error
-                        *ngIf="accountForm.get('accountName').hasError('pattern') && !accountName.hasError('required')">
+                    <mat-error
+                        *ngIf="accountName.hasError('pattern') && !accountName.hasError('required')">
                         Please enter a valid account name
-                    </mat-error> -->
+                    </mat-error>
                 </mat-form-field>
                 <div>
                     <button mat-button matStepperPrevious>Back</button>
-                    <button mat-button matStepperNext>Continue</button>
+                    <button mat-button (click)="submitAccount()">Continue</button>
                 </div>
             </form>
-            <div>
-                <button mat-button (click)="move(0)">Go Back</button>
-            </div>
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>Message Step</ng-template>
             <div>
+                <h4>{{title}}</h4>
+                {{message}}
                 <button mat-button (click)="move(0)">Go Back</button>
             </div>
         </mat-step>

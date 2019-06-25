@@ -26,7 +26,11 @@
             "assets": [
               "projects/demo/src/favicon.ico",
               "projects/demo/src/assets",
-              "projects/demo/src/manifest.webmanifest"
+              "projects/demo/src/manifest.webmanifest",
+              "projects/demo/src/app-metadata.json",
+              "projects/demo/src/chain-manifests.json",
+              "projects/demo/src/icon.png",
+              "projects/demo/src/eosiologo.png"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",

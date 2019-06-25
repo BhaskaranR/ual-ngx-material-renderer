@@ -42,7 +42,6 @@ export class UalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loading = val.loading;
       this.message = val.message;
     });
-    debugger;
     console.log(this.ualService.availableAuthenticators);
   }
 
@@ -54,12 +53,12 @@ export class UalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stepper.selectedIndex = index;
   }
 
-  async onAuthButtonClickHandler(authenticator) {
+  async onAuthButtonClickHandler(authenticator: Authenticator) {
     this.activeAuthenticator = authenticator;
     if (!this.authenticatorCanLogin(authenticator)) {
       return;
     }
-    if (await authenticator.showRequestAccountName()) {
+    if (await authenticator.shouldRequestAccountName()) {
       this.move(1);
     } else {
       this.login(authenticator);

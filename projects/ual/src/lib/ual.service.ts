@@ -36,6 +36,7 @@ export class UalService {
     this.chains = config.chains;
     this.authenticators = config.authenticators;
     this.appName = config.appName;
+    this.initAuthenticators();
   }
 
   initAuthenticators() {
@@ -122,7 +123,6 @@ export class UalService {
 
   showModal() {
     this.availableAuthenticators.forEach(auth => auth.reset);
-    this.initAuthenticators();
     const dialogRef = this.dialog.open(UalComponent, {
       minHeight: '20px',
       // width: '100%',
@@ -164,7 +164,7 @@ export class UalService {
   }
 
 
-  async submitAccountForLogin(accountInput, authenticator) {
+  async submitAccountForLogin( authenticator, accountInput) {
     const authenticatorName = authenticator.constructor.name;
     try {
       const users = await authenticator.login(accountInput);
