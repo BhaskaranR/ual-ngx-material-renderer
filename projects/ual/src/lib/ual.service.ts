@@ -1,19 +1,28 @@
 import { Injectable, Inject } from '@angular/core';
-import { UAL, UALError, UALErrorType } from 'universal-authenticator-library';
+import { UAL, UALError, UALErrorType, Authenticator } from 'universal-authenticator-library';
 import { MatDialog } from '@angular/material';
 import { UALConfig } from './ual.config';
 import { UalComponent } from './ual.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UalService {
 
-  loading = false;
+  loading$ = new BehaviorSubject<{
+    loading?: boolean,
+    isError: boolean,
+    message?: string
+  }>({
+    loading: false,
+    isError: false,
+    message: ''
+  });
+
   activeAuthenticator = null;
   users = [];
   error = null;
-  message = '';
   activeUser: any;
   modal = false;
   availableAuthenticators: Array<any> = [];
@@ -43,7 +52,6 @@ export class UalService {
         const availableCheck = setInterval(() => {
           if (!authenticator.isLoading()) {
             clearInterval(availableCheck);
-            // Only Ledger requires an account name
             if (accountName) {
               this.submitAccountForLogin(accountName, authenticator);
             } else {
@@ -65,9 +73,12 @@ export class UalService {
   }
 
   authenticatorsLoaded() {
-    if (this.loading && this.message === 'Loading Authenticators...' && this.availableAuthenticators.length) {
-      this.message = 'Authenticators loaded.';
-      this.loading = false;
+    if (this.loading$.value.loading && this.loading$.value.message === 'Loading Authenticators...' && this.availableAuthenticators.length) {
+      this.loading$.next({
+        loading: false,
+        isError: false,
+        message: 'Authenticators loaded.'
+      });
     }
   }
 
@@ -102,14 +113,21 @@ export class UalService {
       }, 250);
     } else {
       this.availableAuthenticators = availableAuthenticators;
-      this.message = 'Authenticators loaded.';
+      this.loading$.next({
+        isError: false,
+        message: 'Authenticators loaded.'
+      });
     }
   }
 
   showModal() {
     this.availableAuthenticators.forEach(auth => auth.reset);
+    this.initAuthenticators();
     const dialogRef = this.dialog.open(UalComponent, {
-      width: '250px'
+      minHeight: '20px',
+      // width: '100%',
+      // height: '100%',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -118,17 +136,16 @@ export class UalService {
   }
 
   hideModal() {
-    this.loading = true;
-    this.message = 'Loading Authenticators...';
+    this.loading$.next({
+      loading: true,
+      isError: false,
+      message: 'Loading Authenticators...'
+    });
   }
 
   async authenticateWithoutAccountInput(authenticator, isAutoLogin = false) {
     try {
-      this.loading = true,
-        this.message = authenticator.getStyle().text,
-        this.activeAuthenticator = authenticator,
-        this.activeUser = null;
-
+      this.activeAuthenticator = authenticator;
       const users = await authenticator.login();
       const accountName = await users[0].getAccountName();
       if (!isAutoLogin) {
@@ -136,20 +153,19 @@ export class UalService {
       }
       this.activeUser = users[users.length - 1];
       // users: users,
-      this.loading = false;
-      this.message = `Currently, logged in as ${accountName}`;
+      this.loading$.next({
+        loading: false,
+        isError: false,
+        message: `Currently, logged in as ${accountName}`
+      });
     } catch (e) {
-      this.loading = false,
-        this.error = e;
-      this.message = e.message;
+      throw e;
     }
   }
 
+
   async submitAccountForLogin(accountInput, authenticator) {
     const authenticatorName = authenticator.constructor.name;
-    this.loading = true;
-    // tslint:disable-next-line: max-line-length
-    this.message = authenticator.requiresGetKeyConfirmation() ? 'Please approve the request from your device.' : 'Please wait while we find your account';
     try {
       const users = await authenticator.login(accountInput);
       window.localStorage.setItem('UALLoggedInAuthType', authenticatorName);
@@ -157,20 +173,29 @@ export class UalService {
       this.activeUser = users[users.length - 1],
         this.activeAuthenticator = authenticator,
         this.users = users;
-      this.message = `Currently, logged in as ${accountInput}`;
+      this.loading$.next({
+        isError: false,
+        message: `Currently, logged in as ${accountInput}`
+      });
     } catch (e) {
-      this.loading = false,
-        this.error = e;
-      this.message = e.message;
+      this.error = e;
+      this.loading$.next({
+        loading: false,
+        isError: true,
+        message: e.message
+      });
     }
   }
 
   resetState() {
-    this.loading = false;
     this.activeAuthenticator = null;
     this.users = [];
     this.error = null;
-    this.message = '';
+    this.loading$.next({
+      loading: false,
+      isError: false,
+      message: ''
+    });
   }
 
   logout() {

@@ -1,46 +1,76 @@
 <h4 mat-dialog-title>To continue, please select an option</h4>
-<mat-horizontal-stepper [linear]="isLinear" #stepper>
-    <mat-step [stepControl]="firstFormGroup">
-        <form [formGroup]="firstFormGroup">
-            <ng-template matStepLabel>Fill out your name</ng-template>
-            <mat-form-field>
-                <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
-            </mat-form-field>
-            <div>
-                <button mat-button matStepperNext>Next</button>
+<mat-dialog-content class="mat-typography">
+    <mat-horizontal-stepper [linear]="isLinear" #stepper>
+        <mat-step>
+            <ng-template matStepLabel>Authenticators</ng-template>
+            <mat-nav-list class="full-width" dense>
+                <a mat-list-item *ngFor="let authenticator of ualService.availableAuthenticators; last as last" href="#"
+                    (click)="onAuthButtonClickHandler(authenticator)">
+                    <!-- <mat-icon mat-list-icon>{{ authenticator.getStyle().icon }}</mat-icon> -->
+                    <span mat-line>{{ authenticator.getStyle().text }}</span>
+                    <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
+                    <!-- <span mat-line class="demo-secondary-text"> Description </span> -->
+                </a>
+            </mat-nav-list>
+            <div *ngIf="!infoClicked;else info">
+                <button mat-icon-button (click)="infoClicked=!infoClicked">
+                    <mat-icon>info</mat-icon>
+                </button>
+                Learn more
             </div>
-        </form>
-    </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
-        <form [formGroup]="secondFormGroup">
-            <ng-template matStepLabel>Fill out your address</ng-template>
-            <mat-form-field>
-                <input matInput placeholder="Address" formControlName="secondCtrl" required>
-            </mat-form-field>
+            <ng-template #info>
+                <div>
+                    This option allow you to connect to your favorite key manager app.
+                    <button mat-raised-button (click)="infoClicked=!infoClicked">
+                        I got it!
+                    </button>
+                </div>
+            </ng-template>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Account Input Step</ng-template>
+            <p class="ual-modal-content-description">
+                Next, please enter your Account Name
+            </p>
+            <form (keydown.enter)="submitAccount()">
+                <mat-form-field class="full-width">
+                    <input id="ual-account-input" matInput placeholder="Account Name" FormControlName="accountName"
+                        autocapitalize="none" />
+                    <!-- <mat-error
+                        *ngIf="accountForm.get('accountName').hasError('pattern') && !accountName.hasError('required')">
+                        Please enter a valid account name
+                    </mat-error> -->
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Continue</button>
+                </div>
+            </form>
             <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button matStepperNext>Next</button>
+                <button mat-button (click)="move(0)">Go Back</button>
             </div>
-        </form>
-    </mat-step>
-    <mat-step>
-        <ng-template matStepLabel>Done</ng-template>
-        You are now done.
-        <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button (click)="stepper.reset()">Reset</button>
-        </div>
-    </mat-step>
-</mat-horizontal-stepper>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Message Step</ng-template>
+            <div>
+                <button mat-button (click)="move(0)">Go Back</button>
+            </div>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Error Step</ng-template>
+            <div>
+                <h4>{{title}}</h4>
+                {{message}}
+                <button mat-button (click)="gobackFromError()">Go Back</button>
+            </div>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>No Authenticators</ng-template>
+            <div>
+                <!-- {{ualService.message}}
+                    <button mat-button matStepperPrevious>Go Back</button> -->
+            </div>
+        </mat-step>
+    </mat-horizontal-stepper>
 
-<div mat-dialog-actions>
-    <span style="cursor:auto" *ngIf="!learn;else info " (click)="learn == true">
-        <mat-icon>info</mat-icon> Learn more
-    </span>
-    <ng-template #info>
-        This option allow you to connect to your favorite key manager app.
-        <span style="cursor:auto" (click)="learn == false">
-            <mat-icon>close</mat-icon> I got it!
-        </span>
-    </ng-template>
-</div>
+</mat-dialog-content>

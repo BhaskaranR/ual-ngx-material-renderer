@@ -11,6 +11,7 @@ import { Chain } from 'universal-authenticator-library';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatMenuModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { EOSIOAuth } from 'ual-eosio-reference-authenticator';
 
 const appName = 'demo';
 const chain: Chain = {
@@ -25,7 +26,7 @@ const chain: Chain = {
 // const lynx = new Lynx([exampleNet])
 // const ledger = new Ledger([exampleNet])
 const scatter = new Scatter([chain], {appName});
-
+const eosioAuth = new EOSIOAuth([chain], { appName, protocol: 'eosio' });
 @NgModule({
   declarations: [
     AppComponent
@@ -34,7 +35,7 @@ const scatter = new Scatter([chain], {appName});
     BrowserModule,
     UalModule.forRoot({
       chains: chain,
-      authenticators: [scatter],
+      authenticators: [scatter, eosioAuth],
       appName
     }),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),

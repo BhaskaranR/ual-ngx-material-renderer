@@ -5,7 +5,11 @@
   "projects": {
     "demo": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "root": "projects/demo",
       "sourceRoot": "projects/demo/src",
       "prefix": "app",
@@ -140,7 +144,10 @@
           "options": {
             "main": "projects/ual/src/test.ts",
             "tsConfig": "projects/ual/tsconfig.spec.json",
-            "karmaConfig": "projects/ual/karma.conf.js"
+            "karmaConfig": "projects/ual/karma.conf.js",
+            "styles": [
+              "src/styles.css"
+            ]
           }
         },
         "lint": {

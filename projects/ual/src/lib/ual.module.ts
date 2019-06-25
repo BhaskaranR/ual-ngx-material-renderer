@@ -3,33 +3,28 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { UalComponent } from './ual.component';
-import { AccountInputComponent } from './authentication/account-input/account-input.component';
-import { AuthButtonComponent } from './authentication/auth-button/auth-button.component';
-import { DownloadAuthenticatorComponent } from './authentication/download-authenticator/download-authenticator.component';
-import { GetAuthenticatorComponent } from './authentication/get-authenticator/get-authenticator.component';
-import { MessageComponent } from './message/message.component';
-import { MatInputModule, MatDialogModule, MatIconModule, MatDialog, MatStepperModule } from '@angular/material';
+import { MatInputModule, MatDialogModule, MatIconModule, MatDialog, MatStepperModule, MatListModule, 
+        MatButtonModule } from '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { UalService } from './ual.service';
 import { UALConfig } from './ual.config';
 
 @NgModule({
-  declarations: [UalComponent, AccountInputComponent, AuthButtonComponent, DownloadAuthenticatorComponent,
-    GetAuthenticatorComponent, MessageComponent],
+  declarations: [UalComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    MatListModule,
     MatStepperModule,
     MatDialogModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
-  exports: [UalComponent, AccountInputComponent, AuthButtonComponent, DownloadAuthenticatorComponent,
-    GetAuthenticatorComponent, MessageComponent],
-  entryComponents: [UalComponent, AccountInputComponent, AuthButtonComponent, 
-    DownloadAuthenticatorComponent, GetAuthenticatorComponent, MessageComponent]
+  exports: [UalComponent],
+  entryComponents: [UalComponent]
 })
 export class UalModule {
   static forRoot(config: UALConfig): ModuleWithProviders {
