@@ -19,6 +19,8 @@ export class UalComponent implements OnInit {
 
   loading = false;
   message = '';
+
+  private authStateString = '';
   activeAuthenticator: Authenticator;
   title: string;
 
@@ -32,7 +34,6 @@ export class UalComponent implements OnInit {
   );
 
   constructor(
-    private matIconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
     public dialogRef: MatDialogRef<UalComponent>,
     public ualService: UalService
@@ -40,12 +41,54 @@ export class UalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ualService.availableAuthenticators.forEach(auth => {
-      this.matIconRegistry.addSvgIcon(
-        auth.getStyle().text,
-        this.sanitizer.bypassSecurityTrustResourceUrl(`Url('${auth.getStyle().icon})`)
-      );
+    this.startRefreshAuthenticatorsTimeout();
+  }
+
+  trustImage(auth) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(`${auth.getStyle().icon}`);
+  }
+
+  getApp(authenticator) {
+    this.activeAuthenticator = authenticator;
+    this.move(5);
+  }
+
+  reset() {
+    this.ualService.availableAuthenticators.forEach((authenticator) => authenticator.reset());
+    this.move(0);
+  }
+
+  private startRefreshAuthenticatorsTimeout() {
+    // update our comparison state string
+    if (this.getAuthenticatorsStateString() !== this.authStateString) {
+      this.authStateString = this.getAuthenticatorsStateString();
+
+      // if all authenticators are errored, we want to show the download view
+      const nonErroredAuthenticators = this.ualService.availableAuthenticators.filter((authenticator) => !authenticator.isErrored());
+
+      if (nonErroredAuthenticators.length === 0) {
+        this.move(4);
+      }
+    }
+
+    setTimeout(() => {
+      this.startRefreshAuthenticatorsTimeout();
+    }, 250);
+  }
+
+  retry() {
+    this.move(0);
+  }
+
+  private getAuthenticatorsStateString(): string {
+    const states = this.ualService.availableAuthenticators.map((authenticator) => {
+      return {
+        authenticatorName: authenticator.getStyle().text,
+        isLoading: authenticator.isLoading(),
+        isErrored: authenticator.isErrored()
+      };
     });
+    return JSON.stringify(states);
   }
 
   getBackground(authenticator) {

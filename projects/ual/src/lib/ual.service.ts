@@ -123,6 +123,7 @@ export class UalService extends UAL {
     });
   }
 
+ 
   /**
    * Clears the session data for the logged in user
    */

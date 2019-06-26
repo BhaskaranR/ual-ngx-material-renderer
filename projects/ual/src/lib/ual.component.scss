@@ -21,8 +21,18 @@
   }
 }
 
+.ual-modal-text-box {
+    width: 265px;
+    margin: .7em auto
+  }
+
 .mat-card {
     padding: 0px!important;
+}
+
+.mat-list-avatar {
+    width:auto!important;
+    border-radius:0%!important;
 }
 
 .mat-card-actions {
@@ -62,6 +72,15 @@
     width: 100%;
   }
 
+.mat-nav-list {
+    width: 260px!important;
+}
+.mat-progress-bar[mode=query] {
+    transform: rotateZ(180deg);
+    margin-top: -12px;
+    border-radius: 6px;
+}
+
 .ual-auth-button {
   cursor: pointer;
   color: #ffffff;
@@ -70,7 +89,7 @@
   margin: 0.7em auto;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   opacity: "1";
-  width: 260px;
+  width: 260px!important;
 }
 
 .ual-auth-icon {
@@ -116,6 +135,18 @@
 
   #ual-modal-message {
     margin: .7em auto;
+    width: 260px;
+  }
+
+
+  .ual-auth-button {
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 1.25em;
+    border-radius: 6px;
+    margin: .7em auto;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+    opacity: '1';
     width: 260px;
   }
 

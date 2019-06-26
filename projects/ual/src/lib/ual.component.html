@@ -11,21 +11,26 @@
         <mat-horizontal-stepper [linear]="isLinear" #stepper>
             <mat-step>
                 <mat-card class="mat-card-flat">
-
                     <mat-card-subtitle>To continue, please select an option</mat-card-subtitle>
                     <mat-card-content>
-                        <mat-nav-list class="full-width" dense>
-                            <div mat-list-item
-                                *ngFor="let authenticator of ualService.availableAuthenticators;last as last"
-                                class="ual-auth-button"
-                                [ngStyle]="{'background-color': authenticator.getStyle().background}"
-                                (click)="onAuthButtonClickHandler(authenticator)">
-                                <!-- <mat-icon [svgIcon]="authenticator.getStyle().text"></mat-icon> -->
-                                <div class="ual-auth-text" [ngStyle]="{'color':authenticator.getStyle().textColor}">
-                                    {{ authenticator.getStyle().text }}
-                                    
-                                </div>
-                            </div>
+                        <mat-nav-list dense>
+                            <ng-container *ngFor="let authenticator of ualService.availableAuthenticators;last as last">
+                                <mat-list-item class="ual-auth-button"
+                                    [ngStyle]="{'background-color': authenticator.getStyle().background}">
+                                    <img mat-list-avatar [src]="trustImage(authenticator)">
+
+                                    <a mat-line href="#" [ngStyle]="{'color':authenticator.getStyle().textColor}"
+                                        (click)="onAuthButtonClickHandler(authenticator)">{{ authenticator.getStyle().text }}</a>
+                                    <button mat-icon-button *ngIf="authenticator.isErrored()">
+                                        <mat-icon class="material-icons">error</mat-icon>
+                                    </button>
+                                    <button mat-icon-button (click)="onAuthButtonClickHandler(authenticator)"
+                                        *ngIf="!authenticator.isErrored()">
+                                        <mat-icon class="material-icons">chevron_right</mat-icon>
+                                    </button>
+                                </mat-list-item>
+                                <mat-progress-bar mode="query" *ngIf="authenticator.isLoading()"></mat-progress-bar>
+                            </ng-container>
                         </mat-nav-list>
                     </mat-card-content>
                     <mat-card-actions>
@@ -86,7 +91,47 @@
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>No Authenticators</ng-template>
-                <mat-card-content>{{message}}</mat-card-content>
+                <mat-card class="mat-card-flat">
+                    <mat-card-subtitle> Pardon the interruption</mat-card-subtitle>
+                    <mat-card-content>
+                        <p class="ual-modal-text-box">
+                            Install one of our supported authenticators or ensure your authenticator is running and
+                            click <a class="ual-reset-link" href="#" (click)="reset()">here</a> to retry.
+                        </p>
+                        <mat-nav-list dense>
+                            <ng-container *ngFor="let authenticator of ualService.availableAuthenticators;last as last">
+                                <mat-list-item class="ual-auth-button"
+                                    [ngStyle]="{'background-color': authenticator.getStyle().background}">
+                                    <img mat-list-avatar [src]="trustImage(authenticator)">
+
+                                    <a mat-line href="#" [ngStyle]="{'color':authenticator.getStyle().textColor}"
+                                        (click)="getApp(authenticator)">{{ authenticator.getStyle().text }}</a>
+                                    <button mat-icon-button >
+                                        <mat-icon class="material-icons" (click)="getApp(authenticator)">get_app</mat-icon>
+                                    </button>
+                                   
+                                </mat-list-item>
+                            </ng-container>
+                        </mat-nav-list>
+                    </mat-card-content>
+                </mat-card>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Download Authenticators</ng-template>
+                <mat-card>
+                <mat-card-subtitle>
+                    Install {{activeAuthenticator?.getStyle().text}} to Continue.
+                </mat-card-subtitle>
+                <mat-card-content>
+                        <p class="ual-modal-text-box">
+                            To get started with {{activeAuthenticator?.getStyle().text}}, install the app at the link below.
+                        </p>
+                        <a [href]="activeAuthenticator?.getOnboardingLink()" mat-raised-button color="primary">Leave and Install</a>
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                            <button mat-button matStepperPrevious>Go Back</button>
+                    </mat-card-actions>
+                </mat-card>
             </mat-step>
         </mat-horizontal-stepper>
     </mat-card-content>
