@@ -34,7 +34,7 @@ const eosioAuth = new EOSIOAuth([chain], { appName, protocol: 'eosio' });
   imports: [
     BrowserModule,
     UalModule.forRoot({
-      chains: chain,
+      chains: [chain],
       authenticators: [scatter, eosioAuth],
       appName
     }),

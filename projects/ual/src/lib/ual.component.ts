@@ -3,8 +3,6 @@ import { MatDialogRef, MatStepper, MatIconRegistry } from '@angular/material';
 
 import { Validators, FormControl } from '@angular/forms';
 import { UalService } from './ual.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { Authenticator, UALError, UALErrorType } from 'universal-authenticator-library';
 import { DomSanitizer } from '@angular/platform-browser';
 import { accountNameValidator } from './account-name-validator';
@@ -14,7 +12,7 @@ import { accountNameValidator } from './account-name-validator';
   templateUrl: './ual.component.html',
   styleUrls: ['./ual.component.scss']
 })
-export class UalComponent implements OnInit, AfterViewInit, OnDestroy {
+export class UalComponent implements OnInit {
 
   infoClicked = false;
   isLinear = false;
@@ -24,16 +22,14 @@ export class UalComponent implements OnInit, AfterViewInit, OnDestroy {
   activeAuthenticator: Authenticator;
   title: string;
 
-  @ViewChild('stepper', {static: true} ) stepper: MatStepper;
+  @ViewChild('stepper', { static: true }) stepper: MatStepper;
 
   accountName = new FormControl('', [
     Validators.required,
-     //accountNameValidator()
-    //Validators.pattern(/[a-z1-5]{1}[.a-z1-5]{0,11}/)
+    // accountNameValidator()
+    // Validators.pattern(/[a-z1-5]{1}[.a-z1-5]{0,11}/)
   ]
-    );
-
-  private unsubscribe$ = new Subject();
+  );
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -44,31 +40,24 @@ export class UalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.ualService.loading$.pipe(takeUntil(this.unsubscribe$)).subscribe((val) => {
-      this.loading = val.loading;
-      this.message = val.message;
-    });
-    // console.log(this.ualService.availableAuthenticators.map(auth => auth.getStyle()));
     this.ualService.availableAuthenticators.forEach(auth => {
       this.matIconRegistry.addSvgIcon(
         auth.getStyle().text,
-        this.sanitizer.bypassSecurityTrustResourceUrl(`Url('${auth.getStyle().icon})` )
+        this.sanitizer.bypassSecurityTrustResourceUrl(`Url('${auth.getStyle().icon})`)
       );
     });
   }
 
-  ngAfterViewInit() {
-    this.ualService.authenticatorsLoaded();
-  }
-
   getBackground(authenticator) {
     return this.sanitizer.bypassSecurityTrustStyle(` url(${authenticator.getStyle().icon})`);
-}
+  }
 
   move(index: number) {
     this.stepper.selectedIndex = index;
     if (index === 1) {
       this.title = 'Next, please enter your Account Name';
+    } else if (index === 0) {
+      this.title = '';
     }
   }
 
@@ -97,19 +86,19 @@ export class UalComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       if (accountName !== void 0) {
         this.message = authenticator.requiresGetKeyConfirmation() ?
-                      'Please approve the request from your device.' : 'Please wait while we find your account';
-        this.move(2);
-        await this.ualService.submitAccountForLogin(authenticator, accountName);
+          'Please approve the request from your device.' : 'Please wait while we find your account';
       } else {
         this.message = `Confirm our login request with ${authenticatorName}`;
-        await this.ualService.authenticateWithoutAccountInput(authenticator);
       }
+      this.move(2);
+      await this.ualService.loginUser(authenticator, accountName);
+      this.dialogRef.close();
     } catch (e) {
       if (e instanceof UALError && e.type === UALErrorType.Login) {
         this.title = `${authenticatorName} errored while logging in:`;
         this.message = e.message;
       } else {
-        this.title = 'Login Error:';
+        this.title = 'Login Error';
         this.message = e.message;
       }
       this.move(3);
@@ -128,8 +117,4 @@ export class UalComponent implements OnInit, AfterViewInit, OnDestroy {
     return !authenticator.isLoading() && !authenticator.isErrored();
   }
 
-  ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 }

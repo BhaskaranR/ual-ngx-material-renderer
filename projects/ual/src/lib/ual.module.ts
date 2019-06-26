@@ -5,7 +5,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UalComponent } from './ual.component';
 import { MatInputModule, MatDialogModule, MatIconModule, MatDialog, MatStepperModule, MatListModule, 
         MatButtonModule,
-        MatTooltipModule} from '@angular/material';
+        MatTooltipModule,
+        MatCardModule,
+        MatProgressBarModule} from '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { UalService } from './ual.service';
 import { UALConfig } from './ual.config';
@@ -23,7 +25,9 @@ import { UALConfig } from './ual.config';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCardModule,
+    MatProgressBarModule
   ],
   exports: [UalComponent],
   entryComponents: [UalComponent]

@@ -9,17 +9,19 @@
     $foreground: map-get($theme, foreground);
   
     ual-ual {
-    //   .ual-wrapper {
-    //     border: 1px solid rgba(mat-color($foreground, secondary-text), 0.03);
-    //     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
-    //     margin: 4px;
-    //   }
-  
+
       .ual-title {
         color: mat-color($foreground, secondary-text);
         background: rgba(mat-color($foreground, secondary-text), 0.03);
       }
+
+      .mat-confirmation { 
+        background-color: mat-color($primary); 
+       } 
       
+       .mat-error {
+        background-color: mat-color($warn); 
+       }
     }
   }
 

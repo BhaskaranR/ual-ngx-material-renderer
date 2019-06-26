@@ -1,96 +1,93 @@
-<div class="ual-wrapper">
-    <div class="ual-title">
+<mat-card class="ual-wrapper" [ngClass]="{'mat-confirmation' : stepper.selectedIndex == 2,
+'mat-error' : stepper.selectedIndex == 3
+}">
+    <mat-card-header class="ual-title">
+        <div class="ual-title-spacer">{{title}}</div>
         <span class="spacer"></span>
         <button mat-icon-button type="button" [mat-dialog-close]="true" [matTooltip]="'close'">
             <mat-icon>
                 close
             </mat-icon>
         </button>
-    </div>
-    <div class="ual-body">
+    </mat-card-header>
+    <mat-card-content class="ual-body">
         <mat-horizontal-stepper [linear]="isLinear" #stepper>
             <mat-step>
-                <div class="ual-title">
-                    <div class="ual-title-spacer">To continue, please select an option</div>
-                </div>
-                <mat-nav-list class="full-width" dense>
-                    <div mat-list-item *ngFor="let authenticator of ualService.availableAuthenticators;last as last"
-                        class="ual-auth-button" [ngStyle]="{'background-color': authenticator.getStyle().background}"
-                        (click)="onAuthButtonClickHandler(authenticator)">
-
-                        <!-- <mat-icon [svgIcon]="authenticator.getStyle().text"></mat-icon> -->
-                        <div class="ual-auth-text" [ngStyle]="{'color':authenticator.getStyle().textColor}">
-                            {{ authenticator.getStyle().text }}</div>
-                    </div>
-                </mat-nav-list>
-                <div *ngIf="!infoClicked;else info">
-                    <mat-hint class="ual-learn-more">
-                        <button mat-icon-button (click)="infoClicked=!infoClicked">
-                            <mat-icon>info</mat-icon>
-                        </button>Learn more
-                    </mat-hint>
-                </div>
-                <ng-template #info>
-                    <mat-hint class="ual-learn-more" style="display:block!important;">
-                        This option allows you to connect to your<br> favorite key manager app.
-                        <button mat-raised-button (click)="infoClicked=!infoClicked">
-                            I got it!
+                <mat-card class="mat-card-flat">
+                    <mat-card-subtitle>To continue, please select an option</mat-card-subtitle>
+                    <mat-card-content>
+                        <mat-nav-list class="full-width" dense>
+                            <div mat-list-item
+                                *ngFor="let authenticator of ualService.availableAuthenticators;last as last"
+                                class="ual-auth-button"
+                                [ngStyle]="{'background-color': authenticator.getStyle().background}"
+                                (click)="onAuthButtonClickHandler(authenticator)">
+                                <!-- <mat-icon [svgIcon]="authenticator.getStyle().text"></mat-icon> -->
+                                <div class="ual-auth-text" [ngStyle]="{'color':authenticator.getStyle().textColor}">
+                                    {{ authenticator.getStyle().text }}</div>
+                            </div>
+                        </mat-nav-list>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-icon-button color="primary" *ngIf="!infoClicked" (click)="infoClicked=!infoClicked">
+                            <mat-icon>info</mat-icon> Learn more
                         </button>
-                    </mat-hint>
-                </ng-template>
+                        <mat-hint *ngIf="infoClicked" class="ual-learn-more">
+                            This option allows you to connect to<br> your favorite key manager app.
+                            <button *ngIf="infoClicked" mat-stroked-button color="primary"
+                                (click)="infoClicked=!infoClicked">
+                                Got It
+                            </button>
+                        </mat-hint>
+                    </mat-card-actions>
+                </mat-card>
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Account Input Step</ng-template>
-                <div class="ual-title">
-                    <div class="ual-title-spacer">Next, please enter your username.</div>
-                </div>
-
-                <div class="ual-account-input-form">
-                    <form (keydown.enter)="submitAccount()">
-                        <mat-form-field class="full-width">
-                            <input id="ual-account-input" matInput placeholder="Account Name"
-                                [formControl]="accountName" autocapitalize="none" />
-                            <mat-error *ngIf=" accountName.hasError('required')">
-                                Account name is required.
-                            </mat-error>
-                            <mat-error *ngIf="accountName.hasError('invalidName')">
+                <mat-card class="mat-card-flat">
+                    <mat-card-subtitle>Next, please enter your username.</mat-card-subtitle>
+                    <mat-card-content>
+                        <form (keydown.enter)="submitAccount()">
+                            <mat-form-field class="full-width">
+                                <input id="ual-account-input" matInput placeholder="Account Name"
+                                    [formControl]="accountName" autocapitalize="none" />
+                                <mat-error *ngIf=" accountName.hasError('required')">
+                                    Account name is required.
+                                </mat-error>
+                                <mat-error *ngIf="accountName.hasError('invalidName')">
                                     Enter a valid account name.
-                            </mat-error>
-                        </mat-form-field>
-                        <div>
-                            <button mat-button matStepperPrevious>Back</button>
-                            <button mat-button (click)="submitAccount()">Continue</button>
-                        </div>
-                    </form>
-                </div>
+                                </mat-error>
+                            </mat-form-field>
+                            <div>
+                                <button mat-button matStepperPrevious>Back</button>
+                                <button mat-button (click)="submitAccount()">Continue</button>
+                            </div>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Message Step</ng-template>
-                <div class="ual-title">
-                        <div class="ual-title-spacer">{{title}}...</div>
-                    </div>
-                <div class="ual-account-input-form">
-                    {{message}}
-                    <button mat-button (click)="move(0)">Go Back</button>
-                </div>
+                <mat-card class="mat-card-flat">
+                    <mat-card-subtitle>{{message}}</mat-card-subtitle>
+                </mat-card>
             </mat-step>
             <mat-step>
-                    <ng-template matStepLabel>Error Step</ng-template>
-                    <div class="ual-title"  color="error">
-                            <div class="ual-title-spacer">{{title}}...</div>
-                    </div>
-                    <div class="ual-account-input-form" color="error">
-                            {{message}}
+                <ng-template matStepLabel>Error Step</ng-template>
+                <mat-card class="mat-card-flat">
+                    <mat-card-content>{{message}}</mat-card-content>
+                    <mat-card-actions align="end">
                         <button mat-button (click)="gobackFromError()">Go Back</button>
-                    </div>
-                </mat-step>
+                    </mat-card-actions>
+                </mat-card>
+            </mat-step>
             <mat-step>
                 <ng-template matStepLabel>No Authenticators</ng-template>
-                <div class="ual-account-input-form">
-                        No Authenticators found
-                    
-                </div>
+                <mat-card-content>{{message}}</mat-card-content>
             </mat-step>
         </mat-horizontal-stepper>
-    </div>
-</div>
+    </mat-card-content>
+    <mat-card-footer *ngIf="stepper.selectedIndex == 2">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </mat-card-footer>
+</mat-card>
