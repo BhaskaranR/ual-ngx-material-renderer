@@ -4,7 +4,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { UalComponent } from './ual.component';
 import { MatInputModule, MatDialogModule, MatIconModule, MatDialog, MatStepperModule, MatListModule, 
-        MatButtonModule } from '@angular/material';
+        MatButtonModule,
+        MatTooltipModule} from '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { UalService } from './ual.service';
 import { UALConfig } from './ual.config';
@@ -21,7 +22,8 @@ import { UALConfig } from './ual.config';
     MatDialogModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTooltipModule
   ],
   exports: [UalComponent],
   entryComponents: [UalComponent]

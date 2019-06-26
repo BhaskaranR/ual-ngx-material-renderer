@@ -1,11 +1,140 @@
+::ng-deep .mat-dialog-container {
+  padding: 0px !important;
+}
 ::ng-deep .mat-horizontal-stepper-header-container {
-    display: none !important;
-  }
+  display: none !important;
+}
 
-  ::ng-deep .mat-dialog-container {
-      padding: 15px!important;
-  }
+::ng-deep .mat-horizontal-content-container {
+  padding: 0px !important;
+}
 
-  .full-width {
+.spacer {
+  flex: 1 1 auto;
+}
+
+.ual-wrapper {
+  padding-bottom: 10px;
+  h3 {
+    margin-top: 10px;
+  }
+}
+.ual-title {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 8px 20px;
+}
+
+.ual-learn-more {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  padding-left: 20px;
+}
+
+.ual-title-spacer {
+  flex: 1 1 auto;
+}
+
+.ual-body {
+  padding: 2px;
+}
+
+.ual-account-input-form {
+    align-content: center;
+    align-items: center;
+    display: block;
+    justify-content: center;
+    padding: 8px 20px;
+}
+.full-width {
     width: 100%;
   }
+.ual-auth-button {
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 1.25em;
+  border-radius: 6px;
+  margin: 0.7em auto;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  opacity: "1";
+  width: 260px;
+}
+
+.ual-auth-icon {
+  max-height: 30px;
+  max-width: 100%;
+  margin: auto;
+  margin-top: 7%;
+  display: block;
+}
+
+.ual-auth-icon-wrapper {
+  height: 100%;
+  display: inline-block;
+  float: left;
+  width: 50px;
+  padding: 4px 10px 10px 10px;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 5px 0px 0px 5px;
+}
+
+.ual-auth-text {
+  display: inline-block;
+  padding: 12px 13px 12px 15px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  letter-spacing: 1.1px;
+}
+
+.ual-spinner {
+  width: 35px;
+  float: right;
+  padding: 10px 13px;
+}
+
+.ual-spinner > div {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: ual-bouncedelay 1.4s infinite ease-in-out both;
+  animation: ual-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.ual-spinner .ual-bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.ual-spinner .ual-bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes ual-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes ual-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}

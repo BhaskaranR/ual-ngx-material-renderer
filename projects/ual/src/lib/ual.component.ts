@@ -1,11 +1,13 @@
 import { Component, OnInit, Inject, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MatStepper } from '@angular/material';
+import { MatDialogRef, MatStepper, MatIconRegistry } from '@angular/material';
 
 import { Validators, FormControl } from '@angular/forms';
 import { UalService } from './ual.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Authenticator, UALError, UALErrorType } from 'universal-authenticator-library';
+import { DomSanitizer } from '@angular/platform-browser';
+import { accountNameValidator } from './account-name-validator';
 
 @Component({
   selector: 'ual-ual',
@@ -26,12 +28,16 @@ export class UalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   accountName = new FormControl('', [
     Validators.required,
-    Validators.pattern(new RegExp(/[a-z1-5]{1}[.a-z1-5]{0,11}/))
-  ]);
+     //accountNameValidator()
+    //Validators.pattern(/[a-z1-5]{1}[.a-z1-5]{0,11}/)
+  ]
+    );
 
   private unsubscribe$ = new Subject();
 
   constructor(
+    private matIconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer,
     public dialogRef: MatDialogRef<UalComponent>,
     public ualService: UalService
   ) {
@@ -42,15 +48,28 @@ export class UalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loading = val.loading;
       this.message = val.message;
     });
-    console.log(this.ualService.availableAuthenticators);
+    // console.log(this.ualService.availableAuthenticators.map(auth => auth.getStyle()));
+    this.ualService.availableAuthenticators.forEach(auth => {
+      this.matIconRegistry.addSvgIcon(
+        auth.getStyle().text,
+        this.sanitizer.bypassSecurityTrustResourceUrl(`Url('${auth.getStyle().icon})` )
+      );
+    });
   }
 
   ngAfterViewInit() {
     this.ualService.authenticatorsLoaded();
   }
 
+  getBackground(authenticator) {
+    return this.sanitizer.bypassSecurityTrustStyle(` url(${authenticator.getStyle().icon})`);
+}
+
   move(index: number) {
     this.stepper.selectedIndex = index;
+    if (index === 1) {
+      this.title = 'Next, please enter your Account Name';
+    }
   }
 
   async onAuthButtonClickHandler(authenticator: Authenticator) {
