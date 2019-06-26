@@ -97,3 +97,37 @@
   font-weight: bold;
   letter-spacing: 1.1px;
 }
+
+#ual-modal-message-description {
+    color: rgb(20, 35, 93);
+    width: 265px;
+    font-size: 2em;
+    margin: .7em auto
+  }
+
+  #ual-modal-message-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 30px;
+    border: 1px solid #888;
+    border-radius: 6px;
+    width: 370px;
+  }
+
+  #ual-modal-message {
+    margin: .7em auto;
+    width: 260px;
+  }
+
+
+
+  @media only screen and (max-width: 480px) {
+    #ual-modal-message-content {
+      width: calc(100% - 30px);
+      border: 0px;
+      border-radius: 0px;
+      padding: 15px;
+      height: calc(100% - 30px);
+      margin: 0px;
+    }
+  }

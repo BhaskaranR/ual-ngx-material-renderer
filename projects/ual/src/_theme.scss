@@ -17,11 +17,13 @@
 
       .mat-confirmation { 
         background-color: mat-color($primary); 
+        color: mat-color($foreground); 
        } 
       
-       .mat-error {
-        background-color: mat-color($warn); 
-       }
+    //    .mat-error {
+    //     background-color: mat-color($warn); 
+    //     color: mat-color($foreground); 
+    //    }
     }
   }
 

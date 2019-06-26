@@ -1,8 +1,5 @@
-<mat-card class="ual-wrapper" [ngClass]="{'mat-confirmation' : stepper.selectedIndex == 2,
-'mat-error' : stepper.selectedIndex == 3
-}">
+<mat-card class="ual-wrapper">
     <mat-card-header class="ual-title">
-        <div class="ual-title-spacer">{{title}}</div>
         <span class="spacer"></span>
         <button mat-icon-button type="button" [mat-dialog-close]="true" [matTooltip]="'close'">
             <mat-icon>
@@ -14,6 +11,7 @@
         <mat-horizontal-stepper [linear]="isLinear" #stepper>
             <mat-step>
                 <mat-card class="mat-card-flat">
+
                     <mat-card-subtitle>To continue, please select an option</mat-card-subtitle>
                     <mat-card-content>
                         <mat-nav-list class="full-width" dense>
@@ -24,7 +22,9 @@
                                 (click)="onAuthButtonClickHandler(authenticator)">
                                 <!-- <mat-icon [svgIcon]="authenticator.getStyle().text"></mat-icon> -->
                                 <div class="ual-auth-text" [ngStyle]="{'color':authenticator.getStyle().textColor}">
-                                    {{ authenticator.getStyle().text }}</div>
+                                    {{ authenticator.getStyle().text }}
+                                    
+                                </div>
                             </div>
                         </mat-nav-list>
                     </mat-card-content>
@@ -68,9 +68,12 @@
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Message Step</ng-template>
-                <mat-card class="mat-card-flat">
-                    <mat-card-subtitle>{{message}}</mat-card-subtitle>
-                </mat-card>
+                <div id="ual-modal-message-content ual-title">
+                    <p id="ual-modal-message-description"></p>
+                    <p>
+                        <span id="ual-modal-message">{{message}}</span>
+                    </p>
+                </div>
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Error Step</ng-template>
