@@ -1,6 +1,6 @@
 {
   "name": "ual-ngx-renderer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -15,7 +15,9 @@
     "start-demo-aot": "npm run init-build &&  ng serve demo --aot",
     "publish-all": "node .config/publish.js",
     "version": "node .config/version.js",
-    "postinstall": "node patch.js"
+    "postinstall": "node patch.js",
+    "deploy.demo": "ng build  demo  && firebase use ual-demo && firebase deploy || true"
+
   },
   "private": true,
   "dependencies": {

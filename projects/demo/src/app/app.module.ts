@@ -27,6 +27,8 @@ const chain: Chain = {
 // const ledger = new Ledger([exampleNet])
 const scatter = new Scatter([chain], {appName});
 const eosioAuth = new EOSIOAuth([chain], { appName, protocol: 'eosio' });
+
+
 @NgModule({
   declarations: [
     AppComponent
