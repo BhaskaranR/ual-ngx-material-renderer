@@ -100,15 +100,18 @@ export class UalComponent implements OnInit {
     if (index === 1) {
       this.title = 'Next, please enter your Account Name';
     } else if (index === 0) {
+      this.activeAuthenticator = void 0;
       this.title = '';
+    } else if (index === 4) {
+      this.activeAuthenticator = void 0;
     }
   }
 
   async onAuthButtonClickHandler(authenticator: Authenticator) {
-    this.activeAuthenticator = authenticator;
     if (!this.authenticatorCanLogin(authenticator)) {
       return;
     }
+    this.activeAuthenticator = authenticator;
     if (await authenticator.shouldRequestAccountName()) {
       this.move(1);
     } else {

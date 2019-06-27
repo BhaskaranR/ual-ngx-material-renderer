@@ -5,7 +5,6 @@
   display: none !important;
 }
 
-
 ::ng-deep .mat-horizontal-content-container {
   padding: 0px !important;
 }
@@ -22,26 +21,34 @@
 }
 
 .ual-modal-text-box {
-    width: 265px;
-    margin: .7em auto
-  }
+  width: 265px;
+  margin: 0.7em auto;
+}
 
 .mat-card {
-    padding: 0px!important;
+  padding: 0px !important;
+}
+
+.mat-card-title {
+  font-size: 16px!important;
+}
+
+.mat-inner-card {
+  border-radius: 0px!important;
 }
 
 .mat-list-avatar {
-    width:auto!important;
-    border-radius:0%!important;
+  width: auto !important;
+  border-radius: 0% !important;
 }
 
 .mat-card-actions {
-    padding:0px!important;
-    margin:0px!important;
+  padding: 0px !important;
+  margin: 0px !important;
 }
 
 .mat-card-footer {
-    margin:0px!important;
+  margin: 0px !important;
 }
 
 .ual-title {
@@ -52,33 +59,31 @@
   padding: 8px 20px;
 }
 
-
 .ual-learn-more {
   align-content: center;
   align-items: center;
-  display: block!important;
+  display: block !important;
 }
 
 .ual-title-spacer {
   flex: 1 1 auto;
 }
 
-
 .ual-body {
   padding: 16px;
 }
 
 .full-width {
-    width: 100%;
-  }
+  width: 100%;
+}
 
 .mat-nav-list {
-    width: 260px!important;
+  width: 260px !important;
 }
-.mat-progress-bar[mode=query] {
-    transform: rotateZ(180deg);
-    margin-top: -12px;
-    border-radius: 6px;
+.mat-progress-bar[mode="query"] {
+  transform: rotateZ(180deg);
+  margin-top: -13px;
+  border-radius: 6px;
 }
 
 .ual-auth-button {
@@ -89,7 +94,7 @@
   margin: 0.7em auto;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   opacity: "1";
-  width: 260px!important;
+  width: 260px !important;
 }
 
 .ual-auth-icon {
@@ -117,48 +122,18 @@
   letter-spacing: 1.1px;
 }
 
-#ual-modal-message-description {
-    color: rgb(20, 35, 93);
-    width: 265px;
-    font-size: 2em;
-    margin: .7em auto
-  }
+#ual-modal-message {
+  margin: 0.7em auto;
+  width: 260px;
+}
 
-  #ual-modal-message-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 30px;
-    border: 1px solid #888;
-    border-radius: 6px;
-    width: 370px;
-  }
-
-  #ual-modal-message {
-    margin: .7em auto;
-    width: 260px;
-  }
-
-
-  .ual-auth-button {
-    cursor: pointer;
-    color: #ffffff;
-    font-size: 1.25em;
-    border-radius: 6px;
-    margin: .7em auto;
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
-    opacity: '1';
-    width: 260px;
-  }
-
-
-
-  @media only screen and (max-width: 480px) {
-    #ual-modal-message-content {
-      width: calc(100% - 30px);
-      border: 0px;
-      border-radius: 0px;
-      padding: 15px;
-      height: calc(100% - 30px);
-      margin: 0px;
-    }
-  }
+.ual-auth-button {
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 1.25em;
+  border-radius: 6px;
+  margin: 0.7em auto;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  opacity: "1";
+  width: 260px;
+}

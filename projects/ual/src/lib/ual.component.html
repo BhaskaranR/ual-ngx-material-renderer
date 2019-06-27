@@ -1,25 +1,29 @@
-<mat-card class="ual-wrapper">
+<mat-card class="ual-wrapper" [ngStyle]="{'background-color': activeAuthenticator?.getStyle().background,
+                        'color':activeAuthenticator?.getStyle().textColor}">
     <mat-card-header class="ual-title">
         <span class="spacer"></span>
         <button mat-icon-button type="button" [mat-dialog-close]="true" [matTooltip]="'close'">
-            <mat-icon>
+            <mat-icon [ngStyle]="{'color':activeAuthenticator?.getStyle().textColor}">
                 close
             </mat-icon>
         </button>
     </mat-card-header>
     <mat-card-content class="ual-body">
-        <mat-horizontal-stepper [linear]="isLinear" #stepper>
+        <mat-horizontal-stepper [@.disabled]="stepper.selectedIndex !== 0" [linear]="isLinear" #stepper>
             <mat-step>
-                <mat-card class="mat-card-flat">
-                    <mat-card-subtitle>To continue, please select an option</mat-card-subtitle>
+                <mat-card class="mat-card-flat mat-inner-card">
+                    <mat-card-title>To continue, please select an option</mat-card-title>
                     <mat-card-content>
-                        <mat-nav-list dense>
+                        <mat-nav-list>
                             <ng-container *ngFor="let authenticator of ualService.availableAuthenticators;last as last">
-                                <mat-list-item class="ual-auth-button"
+                                <mat-list-item cdkFocusInitial class="ual-auth-button"
+                                    matTooltip="Error loading authenticator"
+                                    matTooltipPosition="above"
+                                    [matTooltipDisabled]="!authenticator.isErrored()"
                                     [ngStyle]="{'background-color': authenticator.getStyle().background}">
                                     <img mat-list-avatar [src]="trustImage(authenticator)">
 
-                                    <a mat-line href="#" [ngStyle]="{'color':authenticator.getStyle().textColor}"
+                                    <a  mat-line href="#" [ngStyle]="{'color':authenticator.getStyle().textColor}"
                                         (click)="onAuthButtonClickHandler(authenticator)">{{ authenticator.getStyle().text }}</a>
                                     <button mat-icon-button *ngIf="authenticator.isErrored()">
                                         <mat-icon class="material-icons">error</mat-icon>
@@ -49,8 +53,9 @@
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Account Input Step</ng-template>
-                <mat-card class="mat-card-flat">
-                    <mat-card-subtitle>Next, please enter your username.</mat-card-subtitle>
+                <mat-card class="mat-card-flat mat-inner-card"
+                    [ngStyle]="{'background-color': activeAuthenticator?.getStyle().background, 'color':activeAuthenticator?.getStyle().textColor}">
+                    <mat-card-title>Next, please enter your username.</mat-card-title>
                     <mat-card-content>
                         <form (keydown.enter)="submitAccount()">
                             <mat-form-field class="full-width">
@@ -64,7 +69,7 @@
                                 </mat-error>
                             </mat-form-field>
                             <div>
-                                <button mat-button matStepperPrevious>Back</button>
+                                <button mat-button (click)="move(0)">Back</button>
                                 <button mat-button (click)="submitAccount()">Continue</button>
                             </div>
                         </form>
@@ -73,16 +78,17 @@
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Message Step</ng-template>
-                <div id="ual-modal-message-content ual-title">
-                    <p id="ual-modal-message-description"></p>
-                    <p>
-                        <span id="ual-modal-message">{{message}}</span>
-                    </p>
-                </div>
+                <mat-card class="mat-card-flat mat-inner-card"
+                    [ngStyle]="{'background-color': activeAuthenticator?.getStyle().background, 'color':activeAuthenticator?.getStyle().textColor}">
+                    <mat-card-title>{{title}}</mat-card-title>
+                    <mat-card-content>{{message}}</mat-card-content>
+                </mat-card>
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Error Step</ng-template>
-                <mat-card class="mat-card-flat">
+                <mat-card class="mat-card-flat mat-inner-card"
+                    [ngStyle]="{'background-color': activeAuthenticator?.getStyle().background, 'color':activeAuthenticator?.getStyle().textColor}">
+                    <mat-card-title>{{title}}</mat-card-title>
                     <mat-card-content>{{message}}</mat-card-content>
                     <mat-card-actions align="end">
                         <button mat-button (click)="gobackFromError()">Go Back</button>
@@ -91,8 +97,8 @@
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>No Authenticators</ng-template>
-                <mat-card class="mat-card-flat">
-                    <mat-card-subtitle> Pardon the interruption</mat-card-subtitle>
+                <mat-card class="mat-card-flat mat-inner-card">
+                    <mat-card-title> Pardon the interruption</mat-card-title>
                     <mat-card-content>
                         <p class="ual-modal-text-box">
                             Install one of our supported authenticators or ensure your authenticator is running and
@@ -106,10 +112,10 @@
 
                                     <a mat-line href="#" [ngStyle]="{'color':authenticator.getStyle().textColor}"
                                         (click)="getApp(authenticator)">{{ authenticator.getStyle().text }}</a>
-                                    <button mat-icon-button >
-                                        <mat-icon class="material-icons" (click)="getApp(authenticator)">get_app</mat-icon>
+                                    <button mat-icon-button>
+                                        <mat-icon class="material-icons" (click)="getApp(authenticator)">get_app
+                                        </mat-icon>
                                     </button>
-                                   
                                 </mat-list-item>
                             </ng-container>
                         </mat-nav-list>
@@ -118,18 +124,21 @@
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Download Authenticators</ng-template>
-                <mat-card>
-                <mat-card-subtitle>
-                    Install {{activeAuthenticator?.getStyle().text}} to Continue.
-                </mat-card-subtitle>
-                <mat-card-content>
+                <mat-card class="mat-card-flat mat-inner-card" [ngStyle]="{'background-color': activeAuthenticator?.getStyle().background,
+                                                                'color':activeAuthenticator?.getStyle().textColor}">
+                    <mat-card-title>
+                        Install {{activeAuthenticator?.getStyle().text}} to Continue.
+                    </mat-card-title>
+                    <mat-card-content>
                         <p class="ual-modal-text-box">
-                            To get started with {{activeAuthenticator?.getStyle().text}}, install the app at the link below.
+                            To get started with {{activeAuthenticator?.getStyle().text}}, install the app at the link
+                            below.
                         </p>
-                        <a [href]="activeAuthenticator?.getOnboardingLink()" mat-raised-button color="primary">Leave and Install</a>
+                        <a [href]="activeAuthenticator?.getOnboardingLink()" mat-raised-button color="primary">Leave and
+                            Install</a>
                     </mat-card-content>
                     <mat-card-actions align="end">
-                            <button mat-button matStepperPrevious>Go Back</button>
+                        <button mat-button (click)="move(4)">Go Back</button>
                     </mat-card-actions>
                 </mat-card>
             </mat-step>
