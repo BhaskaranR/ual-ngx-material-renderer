@@ -16,14 +16,14 @@
                     <mat-card-content>
                         <mat-nav-list>
                             <ng-container *ngFor="let authenticator of ualService.availableAuthenticators;last as last">
-                                <mat-list-item cdkFocusInitial class="ual-auth-button"
+                                <mat-list-item  class="ual-auth-button"
                                     matTooltip="Error loading authenticator"
                                     matTooltipPosition="above"
                                     [matTooltipDisabled]="!authenticator.isErrored()"
                                     [ngStyle]="{'background-color': authenticator.getStyle().background}">
                                     <img mat-list-avatar [src]="trustImage(authenticator)">
 
-                                    <a  mat-line href="#" [ngStyle]="{'color':authenticator.getStyle().textColor}"
+                                    <a cdkFocusInitial mat-line href="javascript:void(0)" [ngStyle]="{'color':authenticator.getStyle().textColor}"
                                         (click)="onAuthButtonClickHandler(authenticator)">{{ authenticator.getStyle().text }}</a>
                                     <button mat-icon-button *ngIf="authenticator.isErrored()">
                                         <mat-icon class="material-icons">error</mat-icon>
@@ -102,7 +102,7 @@
                     <mat-card-content>
                         <p class="ual-modal-text-box">
                             Install one of our supported authenticators or ensure your authenticator is running and
-                            click <a class="ual-reset-link" href="#" (click)="reset()">here</a> to retry.
+                            click <a class="ual-reset-link" href="javascript:void(0)" (click)="reset()">here</a> to retry.
                         </p>
                         <mat-nav-list dense>
                             <ng-container *ngFor="let authenticator of ualService.availableAuthenticators;last as last">
@@ -110,7 +110,7 @@
                                     [ngStyle]="{'background-color': authenticator.getStyle().background}">
                                     <img mat-list-avatar [src]="trustImage(authenticator)">
 
-                                    <a mat-line href="#" [ngStyle]="{'color':authenticator.getStyle().textColor}"
+                                    <a mat-line href="javascript:void(0)" [ngStyle]="{'color':authenticator.getStyle().textColor}"
                                         (click)="getApp(authenticator)">{{ authenticator.getStyle().text }}</a>
                                     <button mat-icon-button>
                                         <mat-icon class="material-icons" (click)="getApp(authenticator)">get_app

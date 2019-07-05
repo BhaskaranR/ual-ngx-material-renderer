@@ -1,6 +1,6 @@
 {
   "name": "ual-ngx-renderer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -17,7 +17,6 @@
     "version": "node .config/version.js",
     "postinstall": "node patch.js",
     "deploy.demo": "ng build  demo  && firebase use ual-demo && firebase deploy || true"
-
   },
   "private": true,
   "dependencies": {
@@ -38,10 +37,19 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
     "@fortawesome/free-brands-svg-icons": "^5.8.2",
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
+    "bignumber.js": "^9.0.0",
+    "eos-auth": "^2.1.15",
+    "eos-transit": "^3.1.2",
+    "eos-transit-ledger-provider": "^3.3.3",
+    "eos-transit-lynx-provider": "^3.1.2",
+    "eos-transit-meetone-provider": "^3.1.2",
+    "eos-transit-scatter-provider": "^3.2.2",
+    "eosjs": "^20.0.0",
     "hammerjs": "^2.0.8",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
     "ual-eosio-reference-authenticator": "^0.1.1",
+    "ual-ngx-material-renderer": "^1.0.1",
     "ual-scatter": "^0.1.3",
     "ual-token-pocket": "^0.1.1",
     "universal-authenticator-library": "^0.1.1",
@@ -57,6 +65,7 @@
     "@babel/core": "^7.4.5",
     "@babel/runtime": "^7.4.5",
     "@linnenschmidt/build-ng-packagr": "^8.0.0",
+    "@types/bignumber.js": "^5.0.0",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
