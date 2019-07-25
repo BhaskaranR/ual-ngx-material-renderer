@@ -1,9 +1,16 @@
 import {  Chain } from 'universal-authenticator-library';
 
+export interface LoginStatus {
+  loading: boolean;
+  message?: string | null;
+}
+
 export interface UALRenderConfig {
     containerElement: HTMLElement;
     buttonStyleOverride?: string;
   }
+
+
 
 export interface UALConfig {
     chains: Chain[];

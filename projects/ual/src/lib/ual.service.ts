@@ -1,8 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
-import { UAL,  Authenticator, User } from 'universal-authenticator-library';
+import { UAL, Authenticator, User } from 'universal-authenticator-library';
 import { MatDialog } from '@angular/material';
-import { UALConfig, SESSION_EXPIRATION_KEY, SESSION_AUTHENTICATOR_KEY, 
-        SESSION_ACCOUNT_NAME_KEY, SESSION_EXPIRATION, AUTHENTICATOR_LOADING_INTERVAL } from './ual.config';
+import {
+  UALConfig, SESSION_EXPIRATION_KEY, SESSION_AUTHENTICATOR_KEY,
+  SESSION_ACCOUNT_NAME_KEY, SESSION_EXPIRATION, AUTHENTICATOR_LOADING_INTERVAL, LoginStatus
+} from './ual.config';
 import { UalComponent } from './ual.component';
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,12 +14,15 @@ import { BehaviorSubject } from 'rxjs';
 export class UalService extends UAL {
 
   users$ = new BehaviorSubject<User[]>(null);
+  loginStatus$ = new BehaviorSubject<LoginStatus>({
+    loading: true
+  });
 
   public isAutologin = false;
   activeAuthenticator = null;
   availableAuthenticators: Authenticator[];
 
-  constructor( @Inject('config') private config: UALConfig, public dialog: MatDialog
+  constructor(@Inject('config') private config: UALConfig, public dialog: MatDialog
   ) {
     super(config.chains, config.appName, config.authenticators);
     this.init();
@@ -25,20 +30,33 @@ export class UalService extends UAL {
 
 
   init() {
-    const authenticators = this.getAuthenticators();
-    // perform this check first, if we're autologging in we don't render a dom
-    if (!!authenticators.autoLoginAuthenticator) {
-      this.isAutologin = true;
-      this.loginUser(authenticators.autoLoginAuthenticator);
-      this.activeAuthenticator = authenticators.autoLoginAuthenticator;
-    } else {
-      // check for existing session and resume if possible
-      this.availableAuthenticators = authenticators.availableAuthenticators;
-      this.attemptSessionLogin(authenticators.availableAuthenticators);
+    try {
+      const authenticators = this.getAuthenticators();
+      // perform this check first, if we're autologging in we don't render a dom
+      if (!!authenticators.autoLoginAuthenticator) {
+        this.isAutologin = true;
+        this.loginUser(authenticators.autoLoginAuthenticator);
+        this.activeAuthenticator = authenticators.autoLoginAuthenticator;
+      } else {
+        // check for existing session and resume if possible
+        this.availableAuthenticators = authenticators.availableAuthenticators;
+        this.attemptSessionLogin(authenticators.availableAuthenticators);
 
-      if (!this.config) {
-        throw new Error('Render Configuration is required when no auto login authenticator is provided');
+        if (!this.config) {
+          this.loginStatus$.next({
+            loading: false,
+            message: 'Render Configuration is required when no auto login authenticator is provided'
+          });
+          this.loginStatus$.complete();
+          throw new Error('Render Configuration is required when no auto login authenticator is provided');
+        }
       }
+    } catch (e) {
+      this.loginStatus$.next({
+        loading: false,
+        message: e.message
+      });
+      this.loginStatus$.complete();
     }
   }
 
@@ -66,6 +84,11 @@ export class UalService extends UAL {
       // clear session if it has expired and continue
       if (Number(sessionExpiration) < new Date().getTime()) {
         localStorage.clear();
+        this.loginStatus$.next({
+          loading: false,
+          message: 'session expired'
+        });
+        this.loginStatus$.complete();
       } else {
         const authenticatorName = localStorage.getItem(SESSION_AUTHENTICATOR_KEY);
         const sessionAuthenticator = authenticators.find(
@@ -75,6 +98,12 @@ export class UalService extends UAL {
         const accountName = localStorage.getItem(SESSION_ACCOUNT_NAME_KEY) || undefined;
         this.loginUser(sessionAuthenticator, accountName);
       }
+    } else {
+      this.loginStatus$.next({
+        loading: false,
+        message: 'no session found'
+      });
+      this.loginStatus$.complete();
     }
   }
 
@@ -104,6 +133,11 @@ export class UalService extends UAL {
     } else {
       users = await authenticator.login();
     }
+    this.loginStatus$.next({
+      loading: false,
+      message: 'successfully logged in'
+    });
+    this.loginStatus$.complete();
     // send our users back
     this.users$.next(users);
   }
@@ -123,7 +157,7 @@ export class UalService extends UAL {
     });
   }
 
- 
+
   /**
    * Clears the session data for the logged in user
    */

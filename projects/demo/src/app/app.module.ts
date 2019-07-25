@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppComponent } from './app.component';
-import { UalModule } from 'ual-ngx-material-renderer';
+import { UalModule, UalService } from 'ual-ngx-material-renderer';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { Scatter } from 'ual-scatter';
@@ -23,11 +23,26 @@ const chain: Chain = {
   }]
 };
 
+export function init_ual(ualservice: UalService) {
+  return () =>  new Promise((resolve, reject) => {
+    if (ualservice.loginStatus$.value && !ualservice.loginStatus$.value.loading) {
+      resolve();
+      return;
+    }
+    ualservice.loginStatus$.subscribe(val => {
+      if (!val.loading) {
+        resolve();
+      }
+    }, (err) => {
+      reject(err);
+    });
+  });
+}
+
 // const lynx = new Lynx([exampleNet])
 // const ledger = new Ledger([exampleNet])
-const scatter = new Scatter([chain], {appName});
+const scatter = new Scatter([chain], { appName });
 const eosioAuth = new EOSIOAuth([chain], { appName, protocol: 'eosio' });
-
 
 @NgModule({
   declarations: [
@@ -51,7 +66,9 @@ const eosioAuth = new EOSIOAuth([chain], { appName, protocol: 'eosio' });
     FontAwesomeModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    { provide: APP_INITIALIZER, useFactory: init_ual, deps: [UalService], multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

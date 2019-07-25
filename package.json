@@ -1,9 +1,9 @@
 {
   "name": "ual-ngx-renderer",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": " ng serve demo --port 8090",
     "build": "ng build",
     "build-core": "ng build ual",
     "init-build": "npm run build-core && npm run version && npm run link-core && npm run version",
