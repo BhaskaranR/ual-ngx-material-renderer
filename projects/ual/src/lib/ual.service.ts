@@ -126,12 +126,20 @@ export class UalService extends UAL {
     localStorage.setItem(SESSION_AUTHENTICATOR_KEY, authenticator.constructor.name);
 
     await this.waitForAuthenticatorToLoad(authenticator);
-
-    if (accountName) {
-      users = await authenticator.login(accountName);
-      localStorage.setItem(SESSION_ACCOUNT_NAME_KEY, accountName);
-    } else {
-      users = await authenticator.login();
+    try {
+      if (accountName) {
+        users = await authenticator.login(accountName);
+        localStorage.setItem(SESSION_ACCOUNT_NAME_KEY, accountName);
+      } else {
+        users = await authenticator.login();
+      }
+    } catch (e) {
+      this.loginStatus$.next({
+        loading: false,
+        message: 'not able to login'
+      });
+      this.loginStatus$.complete();
+      return;
     }
     this.loginStatus$.next({
       loading: false,
