@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { UAL, Authenticator, User } from 'universal-authenticator-library';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {
   UALConfig, SESSION_EXPIRATION_KEY, SESSION_AUTHENTICATOR_KEY,
   SESSION_ACCOUNT_NAME_KEY, SESSION_EXPIRATION, AUTHENTICATOR_LOADING_INTERVAL, LoginStatus

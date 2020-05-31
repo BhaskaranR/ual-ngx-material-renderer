@@ -141,7 +141,7 @@
           "options": {
             "tsConfig": "projects/ual/tsconfig.lib.json",
             "project": "projects/ual/ng-package.json",
-            "assets":[
+            "assets": [
               "src/_theme.scss"
             ]
           }
@@ -172,5 +172,8 @@
       }
     }
   },
-  "defaultProject": "ual"
+  "defaultProject": "ual",
+  "cli": {
+    "analytics": "2336e2a3-66b2-448c-aab6-895be2abe3b4"
+  }
 }

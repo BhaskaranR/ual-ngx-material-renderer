@@ -1,11 +1,10 @@
-import { Component, OnInit, Inject, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MatStepper, MatIconRegistry } from '@angular/material';
-
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 import { Validators, FormControl } from '@angular/forms';
 import { UalService } from './ual.service';
 import { Authenticator, UALError, UALErrorType } from 'universal-authenticator-library';
 import { DomSanitizer } from '@angular/platform-browser';
-import { accountNameValidator } from './account-name-validator';
 
 @Component({
   selector: 'ual-ual',
